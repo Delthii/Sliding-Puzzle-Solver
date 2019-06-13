@@ -20,7 +20,6 @@ namespace PuzzleSolver
             while (true)
             {
                 puzzle = prioQ.Dequeue();
-
                 if (puzzle.ToString().Equals(correct)) return puzzle;
 
                 seen.Add(puzzle.ToString());
