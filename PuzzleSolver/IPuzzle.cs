@@ -10,5 +10,6 @@ namespace PuzzleSolver
         IPuzzle Copy();
         int DistanceToSolved();
         void Print();
+        IPuzzle Predecessor { get; set; }
     }
 }

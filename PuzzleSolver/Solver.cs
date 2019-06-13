@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Priority_Queue;
 
 namespace PuzzleSolver
@@ -11,24 +13,32 @@ namespace PuzzleSolver
             prioQ.Enqueue(puzzle, puzzle.DistanceToSolved());
             const string correct = "123456780";
             var seen = new HashSet<string>();
-
             while (true)
             {
                 puzzle = prioQ.Dequeue();
-                if (puzzle.ToString().Equals(correct)) return puzzle;
+                if (puzzle.ToString().Equals(correct))
+                {
+                    return puzzle;
+                }
 
                 seen.Add(puzzle.ToString());
 
-                foreach (var tile in puzzle.GetPossibleMoves())
+                foreach (var tile in puzzle.GetPossibleMoves().ToArray())
                 {
-                    puzzle = puzzle.Copy();
-                    var blank = puzzle.Blank;
+                    var str = puzzle.ToString();
                     puzzle.Move(tile);
                     if (!seen.Contains(puzzle.ToString()))
                     {
-                        prioQ.Enqueue(puzzle, puzzle.DistanceToSolved());
+                        var copy = puzzle.Copy();
+                        copy.Predecessor = puzzle;
+                        prioQ.Enqueue(copy, copy.DistanceToSolved());
                     }
-                    puzzle.Move(blank);
+                    puzzle.Move(tile);
+                    if (!puzzle.ToString().Equals(str))
+                    {
+
+                        throw new Exception("Hmm");
+                    }
                 }
             }
         }

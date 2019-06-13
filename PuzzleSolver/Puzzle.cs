@@ -9,6 +9,7 @@ namespace PuzzleSolver
         public Tile Blank { get; set; }
         private static readonly Tile[] DefaultTiles = new Puzzle().GetBoard().OrderBy(x => x.Value).ToArray();
         private readonly Tile[,] board = new Tile[3,3];
+        public IPuzzle Predecessor { get; set; }
 
         public Puzzle()
         {
@@ -118,6 +119,7 @@ namespace PuzzleSolver
                 Console.WriteLine();
             }
         }
+
 
         public override string ToString()
         {
