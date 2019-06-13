@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace PuzzleSolver
 {
     public class Puzzle : IPuzzle
     {
-        public Tile Blank { get; set; }
-        private static readonly Tile[] DefaultTiles = new Puzzle().GetBoard().OrderBy(x => x.Value).ToArray();
-        private readonly Tile[,] board = new Tile[3,3];
         public IPuzzle Predecessor { get; set; }
+        private static readonly Tile[] DefaultTiles = new Puzzle().GetBoard().OrderBy(x => x.Value).ToArray();
+        private Tile blank => board.Cast<Tile>().First(x => x.Value == 0);
+        private Tile[,] board = new Tile[3,3];
 
         public Puzzle()
         {
@@ -22,7 +23,6 @@ namespace PuzzleSolver
                     Value = i != 8 ? i + 1 : 0
                 };
                 board[t.X, t.Y] = t;
-                if (t.Value == 0) Blank = t;
             }
         }
 
@@ -32,16 +32,13 @@ namespace PuzzleSolver
             var c = 0;
             while (++c < r.Next(100,200))
             {
-                foreach(var tile in GetPossibleMoves().OrderBy(x => r.Next()))
-                {
-                    Move(tile);
-                }
+                Move(GetPossibleMoves().OrderBy(x => r.Next()).First());
             }
         }
 
         public IPuzzle Copy()
         {
-            var p = new Puzzle();
+            var p = new Puzzle {board = new Tile[3, 3]};
             foreach (var tile in GetBoard())
             {
                 p.board[tile.X, tile.Y] = new Tile
@@ -50,7 +47,6 @@ namespace PuzzleSolver
                     Y = tile.Y,
                     Value = tile.Value
                 };
-                if (tile.Value == 0) p.Blank = p.board[tile.X, tile.Y];
             }
 
             return p;
@@ -83,8 +79,8 @@ namespace PuzzleSolver
 
         private void Add(List<Tile> possibleMoves, int dx, int dy)
         {
-            var x = Blank.X + dx;
-            var y = Blank.Y + dy;
+            var x = blank.X + dx;
+            var y = blank.Y + dy;
             if (x >= 0 && x < 3 && y >= 0 && y < 3)
             {
                 possibleMoves.Add(board[x, y]);
@@ -93,11 +89,12 @@ namespace PuzzleSolver
 
         public void Move(Tile tile)
         {
-            var x = Blank.X;
-            var y = Blank.Y;
-            Blank.X = tile.X;
-            Blank.Y = tile.Y;
-            board[tile.X, tile.Y] = Blank;
+            tile = board[tile.X, tile.Y];
+            var x = blank.X;
+            var y = blank.Y;
+            blank.X = tile.X;
+            blank.Y = tile.Y;
+            board[blank.X, blank.Y] = blank;
             tile.X = x;
             tile.Y = y;
             board[x,y] = tile;
@@ -119,7 +116,6 @@ namespace PuzzleSolver
                 Console.WriteLine();
             }
         }
-
 
         public override string ToString()
         {

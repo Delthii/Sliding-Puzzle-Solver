@@ -16,28 +16,21 @@ namespace PuzzleSolver
             while (true)
             {
                 puzzle = prioQ.Dequeue();
+
                 if (puzzle.ToString().Equals(correct))
                 {
                     return puzzle;
                 }
-
                 seen.Add(puzzle.ToString());
 
                 foreach (var tile in puzzle.GetPossibleMoves().ToArray())
                 {
-                    var str = puzzle.ToString();
-                    puzzle.Move(tile);
-                    if (!seen.Contains(puzzle.ToString()))
+                    var copy = puzzle.Copy();
+                    copy.Move(tile);
+                    if (!seen.Contains(copy.ToString()))
                     {
-                        var copy = puzzle.Copy();
                         copy.Predecessor = puzzle;
                         prioQ.Enqueue(copy, copy.DistanceToSolved());
-                    }
-                    puzzle.Move(tile);
-                    if (!puzzle.ToString().Equals(str))
-                    {
-
-                        throw new Exception("Hmm");
                     }
                 }
             }

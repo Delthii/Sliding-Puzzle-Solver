@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace PuzzleSolver
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var puzzle = new Puzzle();
             puzzle.Shuffle();

@@ -4,7 +4,6 @@ namespace PuzzleSolver
 {
     public interface IPuzzle
     {
-        Tile Blank { get; set; }
         IEnumerable<Tile> GetPossibleMoves();
         void Move(Tile tile);
         IPuzzle Copy();
