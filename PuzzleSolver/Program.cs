@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,7 +19,7 @@ namespace PuzzleSolver
                 solved = solved.Predecessor;
             }
 
-            int c = s.Count();
+            var c = s.Count();
             while (s.Any())
             {
                 s.Pop().Print();
