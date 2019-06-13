@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace PuzzleSolver
 {
@@ -10,10 +9,10 @@ namespace PuzzleSolver
             var puzzle = new Puzzle();
             puzzle.Shuffle();
             var solver = new Solver();
-           // puzzle.Print();
+            puzzle.Print();
             var solved = solver.Solve(puzzle);
             Console.WriteLine();
-           // solved.Print();
+            solved.Print();
             Console.ReadKey();
         }
     }
